@@ -1,0 +1,53 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "facility_name": "Erin Mills TS",
+        "voltage_kv": 115,
+        "voltage_tier": "hv_115",
+        "operator": "Hydro One",
+        "source": "IESO_TX_Registry",
+        "confidence": 1.0,
+        "node_type": "zone_substation",
+        "sar_flood_exposure": 0,
+        "sar_change_tier": "none",
+        "elevation_m": 185.3,
+        "in_official_floodzone": false,
+        "saidi_percentile": 0.4,
+        "resilience_risk_score": null,
+        "risk_label": null,
+        "sar_confidence": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-79.77, 43.55]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "facility_name": "Credit River SS",
+        "voltage_kv": 230,
+        "voltage_tier": "hv_230",
+        "operator": "Hydro One Transmission",
+        "source": "IESO_TX_Registry",
+        "confidence": 1.0,
+        "node_type": "tx_substation",
+        "sar_flood_exposure": 1,
+        "sar_change_tier": "significant",
+        "elevation_m": 152.1,
+        "in_official_floodzone": true,
+        "saidi_percentile": 0.72,
+        "resilience_risk_score": null,
+        "risk_label": null,
+        "sar_confidence": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-79.73, 43.54]
+      }
+    }
+  ]
+}

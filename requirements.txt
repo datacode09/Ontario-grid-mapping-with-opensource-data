@@ -1,0 +1,67 @@
+# ============================================================
+# Ontario Grid Mapper — Core Requirements
+# Install: pip install -r requirements.txt
+# ============================================================
+
+# --- Geospatial core ---
+geopandas>=0.14.0
+shapely>=2.0.0
+pyproj>=3.6.0
+fiona>=1.9.0
+rtree>=1.1.0
+osmnx>=1.7.0
+
+# --- Raster processing ---
+rasterio>=1.3.0
+numpy>=1.26.0
+scipy>=1.11.0
+
+# --- Data wrangling ---
+pandas>=2.1.0
+pyarrow>=14.0.0          # Parquet I/O
+openpyxl>=3.1.0          # Excel reading (IESO sources)
+requests>=2.31.0
+aiohttp>=3.9.0
+httpx>=0.26.0
+
+# --- Graph / topology ---
+networkx>=3.2.0
+
+# --- Visualization ---
+folium>=0.15.0
+plotly>=5.18.0
+dash>=2.14.0
+matplotlib>=3.8.0
+branca>=0.7.0            # Folium dependency, explicit for colormaps
+
+# --- Configuration / utilities ---
+pyyaml>=6.0.1
+python-dotenv>=1.0.0
+click>=8.1.0             # CLI framework
+tqdm>=4.66.0
+tenacity>=8.2.0          # Retry logic with exponential backoff
+cachetools>=5.3.0
+xxhash>=3.4.0            # Fast file hashing
+
+# --- Voronoi / spatial analysis ---
+scipy>=1.11.0            # Already listed above — scipy.spatial.Voronoi
+scikit-learn>=1.3.0      # KNN for transformer proximity
+
+# --- Async utilities ---
+asyncio-pool>=0.6.0
+
+# --- Logging ---
+structlog>=23.2.0
+
+# --- Night-time lights (gridfinder input) ---
+h5py>=3.10.0             # HDF5 reading for NASA Black Marble
+
+# --- Testing ---
+pytest>=7.4.0
+pytest-asyncio>=0.23.0
+pytest-cov>=4.1.0
+
+# --- Jupyter ---
+jupyterlab>=4.0.0
+ipykernel>=6.27.0
+ipywidgets>=8.1.0

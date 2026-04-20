@@ -1,0 +1,42 @@
+# ============================================================
+# Ontario Grid Mapper — SAR Module Extra Requirements
+# Install AFTER core requirements:
+#   pip install -r requirements.txt
+#   pip install -r requirements-sar.txt
+# ============================================================
+
+# --- Core requirements must be installed first ---
+-r requirements.txt
+
+# --- SAR data access ---
+asf_search>=6.7.0        # ASF DAAC Sentinel-1 search & download (Source 21)
+sentinelsat>=1.3.0       # CDSE / Copernicus fallback (Source 20)
+
+# --- Google Earth Engine ---
+earthengine-api>=0.1.380 # GEE server-side processing (Source 23)
+geemap>=0.30.0           # GEE + folium/ipyleaflet helpers
+
+# --- Advanced raster processing ---
+rioxarray>=0.15.0        # xarray + rasterio for SAR mosaicking
+xarray>=2024.1.0
+zarr>=2.16.0             # Chunked array storage for large SAR tiles
+dask>=2024.1.0           # Parallel array processing
+
+# --- SAR-specific processing ---
+pyroSAR>=0.22.0          # PALSAR-2 / general SAR metadata handling (Source 24)
+spatialist>=0.14.0       # pyroSAR dependency
+
+# --- COG (Cloud Optimised GeoTIFF) creation ---
+cogeo-mosaic>=5.0.0      # COG mosaic utilities
+rio-cogeo>=5.3.0         # COG creation and validation
+
+# --- Flood / water detection ---
+scikit-image>=0.22.0     # Image morphology for flood mask cleanup
+
+# --- AWS S3 access (Copernicus DEM) ---
+boto3>=1.34.0            # s3://copernicus-dem-30m/ (Source 25)
+s3fs>=2024.1.0
+
+# --- Additional dependencies ---
+affine>=2.4.0            # Raster transform utilities
+pyproj>=3.6.0            # Already in core; explicit for SAR reprojection

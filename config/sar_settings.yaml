@@ -1,0 +1,101 @@
+sar:
+  enabled: false                    # Set true to activate SAR module
+
+  sentinel1:
+    beam_mode: IW
+    polarisation: [VV, VH]
+    orbit_direction: [ASCENDING, DESCENDING]
+    product_type: GRD               # GRD or RTC
+    reference_window:
+      season: summer                # Aug-Sep dry season composite
+      months: [8, 9]
+      years: [2022, 2023, 2024]     # Multi-year median reference
+
+  date_pairs:
+    - before: "2024-03-01"
+      after:  "2024-04-15"          # Spring melt / flood season
+      label:  "spring_2024"
+    - before: "2023-07-01"
+      after:  "2023-08-01"          # Summer baseline comparison
+      label:  "summer_2023"
+
+  asf:
+    enabled: true
+    beam_mode: IW
+    flight_direction: ""            # "" = both ascending and descending
+    max_results: 50
+
+  gee:
+    enabled: false                  # Requires GEE registration
+    collection: "COPERNICUS/S1_GRD"
+    export_folder: "ontario_grid_sar"
+    scale_m: 10
+
+  palsar2:
+    enabled: false                  # Supplementary L-band for forested corridors
+    annual_mosaic_years: [2022, 2023]
+    bands: [HH, HV]
+
+  corridor_buffers_m:
+    "500": 120
+    "230": 60
+    "115": 40
+    "27.6": 20
+    "distribution": 15
+
+  speckle_filter:
+    type: lee
+    kernel_size: 5
+
+  change_thresholds_db:
+    moderate:    3.0
+    significant: 5.0
+    extreme:     8.0
+
+  flood_threshold_db: -3.0          # VV drop below reference to flag water
+
+  permanent_water_removal: true     # Remove LIO hydrography baseline from flood mask
+
+  resilience_score_weights:
+    sar_flood_exposure:    0.30
+    official_flood_zone:   0.25
+    elevation_inverse:     0.15     # Normalised: 1 - (elev / max_elev)
+    sar_change_tier:       0.15     # none=0, moderate=0.33, significant=0.67, extreme=1.0
+    saidi_percentile:      0.15
+
+  artefact_suppression:
+    flag_spring_melt: true
+    spring_melt_months: [3, 4]      # March–April
+    min_scenes_for_confirmation: 2  # Require ≥2 scenes for extreme change confirmation
+
+  dem:
+    source: "COPERNICUS/DEM/GLO30"  # GEE dataset id
+    local_path: "data/raw/sar/copernicus_dem"
+
+  validation:
+    use_cems: true                  # Cross-validate flood extent vs CEMS
+    use_eccc: true                  # Cross-validate vs ECCC flood zones
+    cems_confidence_boost: true     # Upgrade sar_confidence if CEMS confirms
+
+  sar_confidence_levels:
+    validated:   "validated"        # Confirmed by CEMS/ECCC polygon
+    plausible:   "plausible"        # Consistent with LIO wetlands/hydrology
+    unvalidated: "unvalidated"      # No independent corroboration
+    uncertain:   "uncertain"        # Low coherence / possible layover-shadow
+
+  disclaimer_text: >
+    This layer is a contextual remote-sensing product derived from SAR
+    backscatter data (Sentinel-1 / PALSAR-2). It does not represent exact
+    electrical asset geometry and should not be used for engineering or
+    operational decisions without utility-authoritative verification.
+
+  output:
+    cog_overview_levels: [2, 4, 8, 16]
+    cog_compression: deflate
+    cog_blocksize: 512
+
+  spring_flood_priority_watersheds:
+    - "Credit River"
+    - "Grand River"
+    - "Trent River"
+    - "Ottawa River"

@@ -1,0 +1,94 @@
+region:
+  name: "Mississauga"
+  pilot_area: "Erin Mills"
+  bbox:
+    # Bounding box for Mississauga / Peel Region (EPSG:4326)
+    west:  -79.9
+    south:  43.45
+    east:  -79.5
+    north:  43.75
+
+  full_ontario_bbox:
+    west:  -95.2
+    south:  41.7
+    east:  -74.3
+    north:  56.9
+
+crs:
+  working:  "EPSG:3347"    # Statistics Canada Lambert — area/distance calcs
+  sar:      "EPSG:32617"   # UTM Zone 17N — Sentinel-1 over southern Ontario
+  output:   "EPSG:4326"    # WGS84 — all exports
+
+voltage_tiers:
+  hv:  [500, 230, 115]     # kV — transmission
+  mv_primary: [27.6, 25, 14.4, 13.8, 8.0]  # kV — primary distribution
+  mv_secondary: [4.16, 2.4]  # kV — legacy distribution (Toronto/Ottawa)
+  lv: 0.24                 # kV — secondary / service
+
+paths:
+  cache_dir:    "data/raw"
+  processed:    "data/processed"
+  outputs:      "data/outputs"
+  sar_raw:      "data/raw/sar"
+  sar_derived:  "data/processed/sar_derived"
+
+cache:
+  max_age_days: 7          # Redownload sources older than N days
+  hash_algorithm: sha256
+
+osm:
+  overpass_url: "https://overpass-api.de/api/interpreter"
+  timeout_s:    300
+  max_retries:  3
+  power_tags:
+    - power=line
+    - power=minor_line
+    - power=cable
+    - power=substation
+    - power=transformer
+    - power=pole
+    - power=tower
+    - power=generator
+    - power=switch
+
+confidence:
+  authoritative:        1.00   # OEB / IESO
+  osm_confirmed:        0.90   # OSM with voltage tag
+  osm_inferred:         0.75   # OSM, no voltage tag
+  ml_urban:             0.65   # GridMapping ML — urban
+  ml_suburban:          0.45   # GridMapping ML — suburban
+  gridfinder_rural:     0.30   # gridfinder night-lights
+  voronoi_only:         0.20   # Voronoi proxy, no transformer
+
+ml_inference:
+  enabled: true
+  osm_coverage_threshold: 0.60  # Run ML where OSM < 60% coverage
+  pytorch_fallback: true        # Fall back to OSM-only if PyTorch unavailable
+  streetview:
+    provider: "mapillary"       # "google" or "mapillary"
+    images_per_km: 4
+  pole_detector:
+    model_weights: "data/raw/gridmapping/pole_model.pth"
+    confidence_threshold: 0.7
+  gridfinder:
+    night_lights_product: "VNP46A1"
+    prediction_threshold: 0.5
+
+operators:
+  known:
+    - "Hydro One"
+    - "Toronto Hydro"
+    - "Alectra"
+    - "Hydro Ottawa"
+    - "PowerStream"
+    - "Enbridge Gas"  # gas only — exclude from electric
+  default_rural: "Hydro One"
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
+  file: "data/outputs/pipeline.log"
+
+async:
+  max_concurrent_downloads: 8
+  chunk_size_bytes: 65536
